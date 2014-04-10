@@ -33,7 +33,7 @@ app.get('/lookup', function(request, response) {
   var urls = [];
   var urlPattern = /(http|ftp|https):\/\/[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])?/
 
-  T.get('statuses/user_timeline', { 'screen_name' : request.query.username, 'count': 20 }, function(err, reply) {
+  T.get('statuses/user_timeline', { 'screen_name' : request.query.username, 'count': 50 }, function(err, reply) {
     for (i in reply){
       tweet = reply[i].text;
    
@@ -57,8 +57,8 @@ app.get('/lookup', function(request, response) {
       }).map(function(result) {
         return result.value;
       }).filter(function(summary) {
-        //filters URLs from picture sites
-        return !(/twitpic|imgur|instagra/.test(summary.url));
+        //omits URLs from picture sites
+        return !(/twitpic|imgur|instagra|status/.test(summary.url));
       }).map(function(summary) {
         return {
           url: summary.url,
