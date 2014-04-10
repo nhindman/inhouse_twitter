@@ -6,6 +6,7 @@ var request = require("request");
 var EMBEDLY_KEY = '8c394ac3008745d48fe82133e6acc577';
 app.use(express.logger());
 
+//makes embedly request, send accepted URLs
 var summarize = function(url) {
   var deferred = Q.defer();
   request("https://api.embed.ly/1/extract", {
@@ -31,7 +32,7 @@ app.get('/lookup', function(request, response) {
   var tweets = [];
   var urls = [];
   var urlPattern = /(http|ftp|https):\/\/[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])?/
-   
+
   T.get('statuses/user_timeline', { 'screen_name' : request.query.username, 'count': 20 }, function(err, reply) {
     for (i in reply){
       tweet = reply[i].text;
@@ -56,6 +57,7 @@ app.get('/lookup', function(request, response) {
       }).map(function(result) {
         return result.value;
       }).filter(function(summary) {
+        //filters URLs from picture sites
         return !(/twitpic|imgur|instagra/.test(summary.url));
       }).map(function(summary) {
         return {
