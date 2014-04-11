@@ -59,6 +59,7 @@ app.get('/lookup', function(request, response) {
       }).filter(function(summary) {
         //omits URLs from picture sites
         return !(/twitpic|imgur|instagra|status/.test(summary.url));
+        return !(summary.description === null)
       }).map(function(summary) {
         return {
           url: summary.url,
