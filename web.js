@@ -58,9 +58,9 @@ app.get('/lookup', function(request, response) {
         return result.value;
       }).filter(function(summary) {
         //omits URLs from picture sites
-        return !(/twitpic|imgur|instagra|status/.test(summary.url));
-        //omit URLS with no descriptions
-        return !(summary.description = null)
+        var filtered = !(/twitpic|imgur|instagra|status/.test(summary.url));
+        var blank = !(summary.description == null);
+        return ( ! filtered && ! blank);
       }).map(function(summary) {
         return {
           url: summary.url,
