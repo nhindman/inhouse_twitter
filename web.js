@@ -58,9 +58,7 @@ app.get('/lookup', function(request, response) {
         return result.value;
       }).filter(function(summary) {
         //omits URLs from picture sites
-        var filtered = !(/twitpic|imgur|instagra|status/.test(summary.url));
-        var blank = !(summary.description == null);
-        return ( ! filtered && ! blank);
+        return !(/twitpic|imgur|instagra|status/.test(summary.url) && summary.description == null);
       }).map(function(summary) {
         return {
           url: summary.url,
@@ -90,4 +88,3 @@ var port = process.env.PORT || 5000;
 app.listen(port, function() {
   console.log("Listening on " + port);
 });
-
