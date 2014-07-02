@@ -31,12 +31,15 @@ app.get('/lookup', function(request, response) {
    
   var tweets = [];
   var urls = [];
-  var urlPattern = /(http|ftp|https):\/\/[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])?/
+  var urlPattern = /(http|ftp|https):\/\/[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])?/  
 
-  T.get('statuses/user_timeline', { 'screen_name' : request.query.username, 'count': 20 }, function(err, reply) {
+  T.get('statuses/user_timeline', { 'screen_name' : request.query.username, 'count': 1 }, function(err, reply) {
+    
     for (i in reply){
       tweet = reply[i].text;
-   
+      profile_image = reply[i].user.profile_image_url;
+      console.log("here is profile image", profile_image);
+
       if (urlPattern.test(tweet)){
         tweets.push(tweet);
         var urlRegex = /(https?:\/\/[^\s]+)/g;
@@ -61,6 +64,7 @@ app.get('/lookup', function(request, response) {
         return !(/twitpic|imgur|instagra|status/.test(summary.url) && summary.description == null);
       }).map(function(summary) {
         return {
+          profile_image: profile_image,
           url: summary.url,
           title: summary.title,
           image: summary.images[0].url,
